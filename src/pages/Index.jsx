@@ -34,9 +34,15 @@ const Index = () => {
         throw new Error("Failed to fetch response from the server.");
       }
 
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Invalid response from the server.");
+      }
+
       const data = await response.json();
       setMessages([...newMessages, { role: "assistant", content: data.content }]);
     } catch (error) {
+      console.error("Error:", error);
       toast.error(error.message);
     }
   };
